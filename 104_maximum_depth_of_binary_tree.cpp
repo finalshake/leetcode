@@ -18,3 +18,35 @@ public:
 
 /* 明天再试第二种BFS方法吧，熬夜不好。
  * */
+
+/* 第二天2021.02.18
+ * BFS解法的思路：每遍历一层，depth+1, 直到遍历到最后一层子节点
+ * */
+
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+      if(!root)
+        return 0;
+      queue<TreeNode*> q;
+      q.push(root);
+      int depth = 0;
+      while(!q.empty())
+      {
+        int sz = q.size();
+        for(int i = 0; i < sz; i++)
+        {
+          TreeNode* cur = q.front();
+          q.pop();
+          if(cur->left)
+            q.push(cur->left);
+          if(cur->right)
+            q.push(cur->right);
+        }
+        depth++;
+      }
+      return depth;
+    }
+};
+
+//好吧，官方题解里DFS将+1提到了max（）外面，能节省些时间
