@@ -99,3 +99,47 @@ public:
 };
 /* 真他妈挫！时间复杂度上天。还在checkBalance函数返回bool型true上纠结半天。垃圾
  * 赶紧看官方解，加强此类型训练。*/
+
+/* 2021.02.21重新再写个从顶至下的*/
+class Solution {
+public:
+    bool isBalanced(TreeNode* root) {
+      if(!root)
+        return true;
+      vector<int> memo;
+      int n = 0;
+      return (abs(depth(root->left, memo, n) - depth(root->right, memo, n)) <= 1) && isBalanced(root->left) && isBalanced(root->right);
+    }
+
+    int depth(TreeNode* root, vector<int>& memo, int& n)
+    {
+      if(!root)
+        return 0;
+      n++;
+      if(n <= memo.size())
+        return memo[n-1];
+      memo.push_back(max(depth(root->left, memo, n), depth(root->right, memo, n)) + 1);
+      return memo[n-1];
+    }
+};
+/* heap overflow了！*/
+
+/* 从底向上*/
+
+class Solution {
+public:
+    bool isBalanced(TreeNode* root) {
+      return depth(root) != -1;
+    }
+
+    int depth(TreeNode* root)
+    {
+      if(!root)
+        return 0;
+      int ldepth = depth(root->left);
+      int rdepth = depth(root->right);
+      if(ldepth == -1 || rdepth == -1 || abs(ldepth - rdepth) > 1)
+        return -1;
+      return (max(ldepth, rdepth) + 1);
+    }
+};
