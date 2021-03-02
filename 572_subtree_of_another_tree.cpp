@@ -90,12 +90,12 @@ public:
     {
       if(!root)
         return;
-      if(check(root, sub, ret))
+      if(check(root, sub))
         {ret = true;return;}
       do_check(root->left, sub, ret);
       do_check(root->right, sub, ret);
     }
-    bool check(TreeNode* s, TreeNode* t, bool& ret)
+    bool check(TreeNode* s, TreeNode* t)
     {
       bool res = true;
       if(!s && !t)
@@ -105,7 +105,7 @@ public:
         //ret = false;
         return false;
       }
-      return (s->val == t->val && check(s->left, t->left, ret) && check(s->right, t->right, ret));
+      return (s->val == t->val && check(s->left, t->left) && check(s->right, t->right));
     }
 
 };
