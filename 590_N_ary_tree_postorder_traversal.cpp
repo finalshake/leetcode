@@ -49,3 +49,35 @@ public:
       res.push_back(root->val);
     }
 };
+
+/* 来个迭代的*/
+
+class Solution {
+public:
+    vector<int> postorder(Node* root) {
+      vector<int> res;
+      if(!root)
+        return res;
+      stack<Node*> tmp;
+      stack<int> res_s;
+      tmp.push(root);
+      while(!tmp.empty())
+      {
+        Node* cur = tmp.top();
+        tmp.pop();
+        res_s.push(cur->val);
+        for(Node* node : cur->children)
+        {
+          tmp.push(node);
+        }
+      }
+      while(!res_s.empty())
+      {
+        res.push_back(res_s.top());
+        res_s.pop();
+      }
+      return res;
+    }
+};
+/* 迭代总结：如果前序遍历，则用栈，逆序压栈，保证栈顶是先序遍历的顺序。
+ * 同理，后序遍历，用栈，多一个中转的栈，保证结果栈的栈顶是后序遍历的顺序。*/
