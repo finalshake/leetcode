@@ -36,7 +36,6 @@ public:
       queue<TreeNode*> result;
       q1.push(root1);
       q2.push(root2);
-      result.push(res);
       while(!q1.empty() || !q2.empty())
       {
         TreeNode* cur1 = q1.front();
@@ -56,7 +55,7 @@ public:
           tmp = cur1->val;
         else
           tmp = cur1->val + cur2->val;
-        result.front()->val = tmp;
+        result.push(TreeNode(tmp));
         if(cur1)
         {
           q1.push(cur1->left);
@@ -84,6 +83,75 @@ public:
         result.pop();
         result.push(left);
         result.push(right);
+      }
+      return res;
+    }
+};
+/* 以上程序可以称为屎山，又臭又长
+ * 重新梳理来一个。*/
+
+class Solution {
+public:
+    TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+      TreeNode* res = new TreeNode();
+      if(!root1 && !root2)
+        return nullptr;
+      queue<TreeNode*> q;
+      queue<TreeNode*> result;
+      q.push(root1);
+      q.push(root2);
+      result.push(res);
+      while(!q.empty())
+      {
+        TreeNode* cur1 = q.front();
+        q.pop();
+        TreeNode* cur2 = q.front();
+        q.pop();
+        if(!cur1 && !cur2)
+          continue;
+        if(cur1 && cur2)
+        {
+          int tmp = cur1->val + cur2->val;
+          TreeNode* cur = result.front();
+          cur->val = tmp;
+          result.pop();
+          if(cur1->left || cur2->left)
+          {
+            q.push(cur1->left);
+            q.push(cur2->left);
+            cur->left = new TreeNode();
+            result.push(cur->left);
+          }
+          if(cur1->right || cur2->right)
+          {
+            q.push(cur1->right);
+            q.push(cur2->right);
+            cur->right = new TreeNode();
+            result.push(cur->right);
+          }
+        }
+        else if(cur1 || cur2)
+        {
+          int tmp = cur1 ? cur1->val : cur2->val;
+          TreeNode* cur = result.front();
+          cur->val = tmp;
+          result.pop();
+          TreeNode* now = cur1 ? cur1 : cur2;
+          if(now->left)
+          {
+            q.push(now->left);
+            q.push(nullptr);
+            cur->left = new TreeNode();
+            result.push(cur->left);
+          }
+          if(now->right)
+          {
+            q.push(now->right);
+            q.push(nullptr);
+            cur->right = new TreeNode();
+            result.push(cur->right);
+          }
+        }
       }
       return res;
     }
