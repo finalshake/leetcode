@@ -72,3 +72,40 @@ public:
       traverse(root->right, prev, start);
     }
 };
+
+/* 经历了几次失败，stackoverflow,终于找到原因，因为老节点的左子树指针没有改变为null,互相乱指*/
+class Solution {
+public:
+    TreeNode* start;
+    TreeNode* increasingBST(TreeNode* root) {
+      TreeNode *prev = nullptr;
+      if(!root)
+        return nullptr;
+      traverse(root, prev);
+      return start;
+    }
+
+    void traverse(TreeNode* root, TreeNode*& prev)
+    {
+      if(!root)
+      {
+        if(prev)
+          prev->left = nullptr;       //重要！防止最后一个子树：只有左子树，右子树为空，比如[2,1,4,null,null,3]
+        return;
+      }
+      traverse(root->left, prev);
+      if(!prev)
+      {
+        start = root;
+        prev = root;
+      }
+      else
+      {
+        prev->right = root;
+        prev->left = nullptr;          //重要！之前就没加这句，导致原节点左指针存在，乱指。
+        prev = root;
+      }
+      traverse(root->right, prev);
+    }
+
+};
