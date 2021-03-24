@@ -31,9 +31,25 @@
 
 已经用DFS做了一遍。再用BFS试一下*/
 //思路不清晰，看了题解，明天再写。
+//其实就是用个stack,入栈时先右后左。
 class Solution {
 public:
     void flatten(TreeNode* root) {
-
+      if(!root)
+        return;
+      stack<TreeNode*> s;
+      s.push(root);
+      while(!s.empty())
+      {
+        TreeNode *cur = s.top();
+        s.pop();
+        if(cur->right)
+          s.push(cur->right);
+        if(cur->left)
+          s.push(cur->left);
+        cur->left = nullptr;
+        if(!s.empty())
+          cur->right = s.top();
+      }
     }
 };
